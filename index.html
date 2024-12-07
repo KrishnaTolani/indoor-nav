@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Indoor AR Navigation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Required Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://docs.opencv.org/master/opencv.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div id="controls">
+            <button id="startAR" disabled>Start AR</button>
+            <button id="startMapping" disabled>Start Mapping</button>
+            <button id="addPoint" disabled>Add Point</button>
+            <select id="destinations" disabled>
+                <option value="">Select Destination</option>
+            </select>
+        </div>
+        <div id="status">Checking AR compatibility...</div>
+    </div>
+
+    <!-- Your Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/feature-tracker.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/room-mapper.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
