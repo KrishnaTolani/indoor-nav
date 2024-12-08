@@ -3,23 +3,11 @@ class ARNavigationApp {
         this.initialized = false;
         this.videoElement = null;
         this.stream = null;
-        this.setupInitialButton();
+        // Request camera permission immediately
+        this.initializeCamera();
     }
 
-    setupInitialButton() {
-        const startButton = document.getElementById('startAR');
-        startButton.addEventListener('click', async () => {
-            startButton.disabled = true;
-            try {
-                await this.startCamera();
-            } catch (error) {
-                startButton.disabled = false;
-                this.showError(error.message);
-            }
-        });
-    }
-
-    async startCamera() {
+    async initializeCamera() {
         try {
             // Check if it's a mobile device
             if (!this.isMobileDevice()) {
@@ -31,7 +19,7 @@ class ARNavigationApp {
             // Get video element
             this.videoElement = document.getElementById('camera-feed');
             
-            // Request camera access
+            // Request camera access immediately
             this.stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: 'environment',
@@ -59,90 +47,26 @@ class ARNavigationApp {
 
             this.updateStatus('Camera started successfully!');
             document.getElementById('initial-prompt').style.display = 'none';
+            document.getElementById('controls').style.display = 'flex';
             
-            // Initialize AR after camera is working
-            await this.initializeApp();
+            // Enable AR button after camera is working
+            const startARButton = document.getElementById('startAR');
+            startARButton.textContent = 'Start AR';
+            startARButton.disabled = false;
+            startARButton.addEventListener('click', () => this.initAR());
 
         } catch (error) {
             console.error('Camera start error:', error);
             if (error.name === 'NotAllowedError') {
-                this.showError('Camera permission denied. Please allow camera access and try again.');
+                this.showError('Camera permission denied. Please allow camera access and reload the page.');
             } else {
                 this.showError('Failed to start camera: ' + error.message);
             }
-            throw error;
-        }
-    }
-
-    async initializeApp() {
-        try {
-            // Check if it's a mobile device
-            if (!this.isMobileDevice()) {
-                throw new Error('Please use a mobile device');
-            }
-
-            this.updateStatus('Requesting camera permission...');
-            
-            // Request camera permission first
-            const cameraGranted = await this.requestCameraPermission();
-            if (!cameraGranted) {
-                throw new Error('Camera permission is required');
-            }
-
-            // Initialize AR after camera permission
-            await this.initAR();
-            
-            // Show controls after successful initialization
-            document.getElementById('controls').style.display = 'flex';
-            document.getElementById('initial-prompt').style.display = 'none';
-
-        } catch (error) {
-            this.showError(error.message);
-            document.getElementById('startAR').disabled = false;
         }
     }
 
     isMobileDevice() {
         return /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    }
-
-    async requestCameraPermission() {
-        try {
-            // Create video element if it doesn't exist
-            if (!this.videoElement) {
-                this.videoElement = document.createElement('video');
-                this.videoElement.id = 'camera-preview';
-                this.videoElement.playsInline = true;
-                this.videoElement.style.position = 'fixed';
-                this.videoElement.style.top = '0';
-                this.videoElement.style.left = '0';
-                this.videoElement.style.width = '100%';
-                this.videoElement.style.height = '100%';
-                this.videoElement.style.objectFit = 'cover';
-                document.body.appendChild(this.videoElement);
-            }
-
-            // Request camera stream
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: 'environment',
-                    width: { ideal: window.innerWidth },
-                    height: { ideal: window.innerHeight }
-                },
-                audio: false
-            });
-
-            // Attach stream to video element
-            this.videoElement.srcObject = stream;
-            await this.videoElement.play();
-            
-            this.updateStatus('Camera access granted!');
-            return true;
-        } catch (error) {
-            console.error('Camera permission error:', error);
-            this.showError('Camera permission denied. Please allow camera access and try again.');
-            return false;
-        }
     }
 
     async initAR() {
@@ -186,11 +110,10 @@ class ARNavigationApp {
                 if (this.videoElement) {
                     this.videoElement.style.display = 'block';
                 }
-                location.reload();
             });
 
         } catch (error) {
-            throw new Error('Failed to start AR: ' + error.message);
+            this.showError('Failed to start AR: ' + error.message);
         }
     }
 
