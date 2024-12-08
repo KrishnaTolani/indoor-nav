@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="permissions-policy" content="camera=(), microphone=()">
     <link rel="stylesheet" href="styles.css">
     <!-- Required Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -13,8 +14,11 @@
 <body>
     <div id="app">
         <div id="initial-prompt">
-            <button id="startAR" class="primary-button">Start AR Experience</button>
+            <button id="startAR" class="primary-button">Start Camera</button>
             <p>Please allow camera access when prompted</p>
+        </div>
+        <div id="camera-container" style="display: none;">
+            <video id="camera-feed" autoplay playsinline style="display: none;"></video>
         </div>
         <div id="controls" style="display: none;">
             <button id="startMapping" disabled>Start Mapping</button>
@@ -23,7 +27,7 @@
                 <option value="">Select Destination</option>
             </select>
         </div>
-        <div id="status">Tap 'Start AR Experience' to begin</div>
+        <div id="status">Tap 'Start Camera' to begin</div>
         <div id="error-message"></div>
     </div>
 
