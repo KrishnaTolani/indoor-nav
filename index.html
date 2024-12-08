@@ -7,34 +7,24 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="styles.css">
-    <!-- WebXR polyfill for broader device support -->
-    <script src="https://unpkg.com/webxr-polyfill@latest/build/webxr-polyfill.js"></script>
     <!-- Required Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://docs.opencv.org/master/opencv.js"></script>
-    <!-- Add WebXR button styling -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/webxr-button@0.0.1/button.css">
 </head>
 <body>
     <div id="app">
-        <div id="controls">
-            <button id="startAR" disabled>Start AR</button>
+        <div id="initial-prompt">
+            <button id="startAR" class="primary-button">Start AR Experience</button>
+            <p>Please allow camera access when prompted</p>
+        </div>
+        <div id="controls" style="display: none;">
             <button id="startMapping" disabled>Start Mapping</button>
             <button id="addPoint" disabled>Add Point</button>
             <select id="destinations" disabled>
                 <option value="">Select Destination</option>
             </select>
         </div>
-        <div id="status">Checking AR compatibility...</div>
-        <div id="error-message" style="color: red;"></div>
-        <div id="instructions">
-            <p>For AR to work:</p>
-            <ul>
-                <li>Use Chrome on Android or Safari on iOS</li>
-                <li>Allow camera permissions when prompted</li>
-                <li>Make sure you're using HTTPS</li>
-            </ul>
-        </div>
+        <div id="status">Tap 'Start AR Experience' to begin</div>
+        <div id="error-message"></div>
     </div>
 
     <!-- Your Scripts -->
