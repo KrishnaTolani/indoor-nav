@@ -7,34 +7,42 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="styles.css">
-    <!-- Required Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <div id="app">
+        <!-- Camera Start Screen -->
         <div id="initial-prompt">
-            <button id="startAR" class="primary-button" disabled>Initializing Camera...</button>
-            <p>Please allow camera access when prompted</p>
+            <button id="startCamera" class="primary-button">Start Camera</button>
+            <p>Click to start camera</p>
         </div>
-        <div id="camera-container" style="display: none;">
-            <video id="camera-feed" autoplay playsinline style="display: none;"></video>
+
+        <!-- Camera Feed -->
+        <div id="camera-container">
+            <video id="camera-feed" autoplay playsinline muted></video>
         </div>
-        <div id="controls" style="display: none;">
-            <button id="startMapping" disabled>Start Mapping</button>
-            <button id="addPoint" disabled>Add Point</button>
-            <select id="destinations" disabled>
+
+        <!-- Main Controls -->
+        <div id="controls" class="control-panel">
+            <button id="startMapping" class="control-button" disabled>Start Mapping</button>
+            <button id="addPoint" class="control-button" disabled>Add Point</button>
+            <select id="destinations" class="control-select" disabled>
                 <option value="">Select Destination</option>
             </select>
         </div>
-        <div id="status">Initializing camera...</div>
-        <div id="error-message"></div>
+
+        <!-- Camera Controls -->
+        <div id="camera-controls" class="control-panel">
+            <button id="switchCamera" class="control-button">Switch Camera</button>
+        </div>
+
+        <!-- Status and Messages -->
+        <div id="status" class="status-message">Ready to start</div>
+        <div id="error-message" class="error-message"></div>
     </div>
 
-    <!-- Your Scripts -->
-    <script src="js/utils.js"></script>
-    <script src="js/feature-tracker.js"></script>
-    <script src="js/navigation.js"></script>
-    <script src="js/room-mapper.js"></script>
+    <!-- Scripts -->
+    <script src="js/ARController.js"></script>
+    <script src="js/NavigationSystem.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html> 

@@ -1,10 +1,9 @@
+/* Base Styles */
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    position: fixed;
-    width: 100%;
-    height: 100%;
+    font-family: Arial, sans-serif;
 }
 
 #app {
@@ -13,36 +12,90 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+/* Camera Styles */
+#camera-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+
+#camera-feed {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Control Panels */
+.control-panel {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    width: 90%;
+    max-width: 300px;
     z-index: 1000;
-    pointer-events: none;
 }
 
 #controls {
-    position: fixed;
+    bottom: 100px;
+}
+
+#camera-controls {
     bottom: 20px;
+}
+
+/* Initial Prompt */
+#initial-prompt {
+    position: fixed;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    pointer-events: auto;
-    width: 90%;
-    max-width: 300px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
 }
 
-#controls button, #controls select {
-    padding: 12px 24px;
+/* Buttons */
+.primary-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    background: #007AFF;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.control-button {
+    padding: 12px 20px;
     font-size: 16px;
+    background: #007AFF;
+    color: white;
+    border: none;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #ccc;
-    min-height: 44px;
-    min-width: 44px;
-    margin: 5px 0;
-    touch-action: manipulation;
+    cursor: pointer;
 }
 
-#status {
+.control-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Status Messages */
+.status-message {
     position: fixed;
     top: 20px;
     left: 50%;
@@ -51,110 +104,18 @@ body {
     color: white;
     padding: 10px 20px;
     border-radius: 20px;
-    font-size: 14px;
-    text-align: center;
-    max-width: 80%;
+    z-index: 1000;
 }
 
-#error-message {
+.error-message {
     position: fixed;
     top: 70px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(255, 0, 0, 0.8);
     color: white;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 10px;
-    text-align: center;
+    padding: 10px 20px;
+    border-radius: 20px;
     display: none;
-}
-
-#instructions {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    pointer-events: auto;
-    display: block;
-    max-width: 90%;
-    width: 300px;
-    font-size: 14px;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-#instructions ul {
-    padding-left: 20px;
-    margin: 10px 0;
-}
-
-#instructions li {
-    margin: 5px 0;
-}
-
-button:disabled {
-    opacity: 0.5;
-}
-
-/* Prevent text selection */
-* {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-/* Add active state for buttons */
-#controls button:active {
-    background: rgba(200, 200, 200, 0.9);
-}
-
-#initial-prompt {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-
-.primary-button {
-    background: #007AFF !important;
-    color: white !important;
-    font-size: 18px !important;
-    padding: 15px 30px !important;
-    border: none !important;
-    border-radius: 25px !important;
-    margin-bottom: 15px !important;
-}
-
-#camera-preview {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-}
-
-#camera-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-}
-
-#camera-feed {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    z-index: 1000;
 } 
