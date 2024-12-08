@@ -1,13 +1,20 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 #app {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    z-index: 1000;
+    pointer-events: none;
 }
 
 #controls {
@@ -15,26 +22,22 @@ body {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1000;
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 10px;
-    border-radius: 10px;
+    pointer-events: auto;
 }
 
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-}
-
-button:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
+#controls button, #controls select {
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    min-height: 44px;
+    min-width: 44px;
+    margin: 5px 0;
+    touch-action: manipulation;
 }
 
 #status {
@@ -46,27 +49,59 @@ button:disabled {
     color: white;
     padding: 10px 20px;
     border-radius: 20px;
-    z-index: 1000;
+    font-size: 14px;
 }
 
-/* Add these mobile-specific styles */
-@media only screen and (max-width: 768px) {
-    #controls {
-        width: 90%;
-        flex-direction: column;
-        bottom: 40px;
-    }
+#error-message {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+}
 
-    button {
-        width: 100%;
-        padding: 15px;
-        margin: 5px 0;
-        font-size: 16px;
-    }
+#instructions {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    pointer-events: auto;
+    display: block;
+    max-width: 90%;
+    width: 300px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
 
-    #status {
-        width: 80%;
-        text-align: center;
-        font-size: 14px;
-    }
+#instructions ul {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+#instructions li {
+    margin: 5px 0;
+}
+
+button:disabled {
+    opacity: 0.5;
+}
+
+/* Prevent text selection */
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Add active state for buttons */
+#controls button:active {
+    background: rgba(200, 200, 200, 0.9);
 } 
