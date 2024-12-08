@@ -2,14 +2,14 @@ class ARNavigationApp {
     constructor() {
         this.initialized = false;
         this.setupInitialButton();
+        this.videoElement = null;
     }
 
     setupInitialButton() {
         const startButton = document.getElementById('startAR');
         startButton.disabled = false;
         startButton.addEventListener('click', async () => {
-            // Hide the initial prompt
-            document.getElementById('initial-prompt').style.display = 'none';
+            startButton.disabled = true;
             await this.initializeApp();
         });
     }
@@ -29,14 +29,59 @@ class ARNavigationApp {
                 throw new Error('Camera permission is required');
             }
 
-            // Initialize AR
+            // Initialize AR after camera permission
             await this.initAR();
             
             // Show controls after successful initialization
             document.getElementById('controls').style.display = 'flex';
+            document.getElementById('initial-prompt').style.display = 'none';
 
         } catch (error) {
             this.showError(error.message);
+            document.getElementById('startAR').disabled = false;
+        }
+    }
+
+    isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    async requestCameraPermission() {
+        try {
+            // Create video element if it doesn't exist
+            if (!this.videoElement) {
+                this.videoElement = document.createElement('video');
+                this.videoElement.id = 'camera-preview';
+                this.videoElement.playsInline = true;
+                this.videoElement.style.position = 'fixed';
+                this.videoElement.style.top = '0';
+                this.videoElement.style.left = '0';
+                this.videoElement.style.width = '100%';
+                this.videoElement.style.height = '100%';
+                this.videoElement.style.objectFit = 'cover';
+                document.body.appendChild(this.videoElement);
+            }
+
+            // Request camera stream
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'environment',
+                    width: { ideal: window.innerWidth },
+                    height: { ideal: window.innerHeight }
+                },
+                audio: false
+            });
+
+            // Attach stream to video element
+            this.videoElement.srcObject = stream;
+            await this.videoElement.play();
+            
+            this.updateStatus('Camera access granted!');
+            return true;
+        } catch (error) {
+            console.error('Camera permission error:', error);
+            this.showError('Camera permission denied. Please allow camera access and try again.');
+            return false;
         }
     }
 
@@ -45,12 +90,12 @@ class ARNavigationApp {
             throw new Error('WebXR not supported on this browser');
         }
 
-        const isSupported = await navigator.xr.isSessionSupported('immersive-ar');
-        if (!isSupported) {
-            throw new Error('AR not supported on this device');
-        }
-
         try {
+            const isSupported = await navigator.xr.isSessionSupported('immersive-ar');
+            if (!isSupported) {
+                throw new Error('AR not supported on this device');
+            }
+
             const session = await navigator.xr.requestSession('immersive-ar', {
                 requiredFeatures: ['local-floor', 'hit-test'],
                 optionalFeatures: ['dom-overlay'],
@@ -64,6 +109,11 @@ class ARNavigationApp {
             this.renderer.xr.enabled = true;
             await this.renderer.xr.setSession(session);
 
+            // Hide video element when AR starts
+            if (this.videoElement) {
+                this.videoElement.style.display = 'none';
+            }
+
             // Enable controls
             document.getElementById('startMapping').disabled = false;
             document.getElementById('addPoint').disabled = false;
@@ -73,7 +123,10 @@ class ARNavigationApp {
             // Handle session end
             session.addEventListener('end', () => {
                 this.updateStatus('AR session ended');
-                location.reload(); // Reload page when AR session ends
+                if (this.videoElement) {
+                    this.videoElement.style.display = 'block';
+                }
+                location.reload();
             });
 
         } catch (error) {
@@ -100,8 +153,6 @@ class ARNavigationApp {
     updateStatus(message) {
         document.getElementById('status').textContent = message;
     }
-
-    // ... rest of your existing methods ...
 }
 
 // Initialize when the page is ready
